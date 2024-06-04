@@ -1,36 +1,49 @@
 from typing import List
-
+import psycopg2  # Ensure this is installed via pip if you're using it directly.
 import nest_asyncio
 import streamlit as st
-from phi.assistant import Assistant
-from phi.document import Document
-from phi.document.reader.pdf import PDFReader
-from phi.document.reader.website import WebsiteReader
-from phi.utils.log import logger
+from phi.assistant import Assistant  # Assuming 'phi' is a custom library/module.
+from phi.document import Document  # Assuming 'phi' is a custom library/module.
+from phi.document.reader.pdf import PDFReader  # Assuming 'phi' is a custom library/module.
+from phi.document.reader.website import WebsiteReader  # Assuming 'phi' is a custom library/module.
+from phi.utils.log import logger  # Assuming 'phi' has logging utilities.
 
-from assistant import get_auto_rag_assistant  # type: ignore
+# Importing get_auto_rag_assistant from assistant.py (ensure it's in PYTHONPATH)
+from assistant import get_auto_rag_assistant  
 
 nest_asyncio.apply()
 st.set_page_config(
-    page_title="Autonomous RAG",
-    page_icon=":orange_heart:",
+    page_title="Auto RAG",
+    page_icon=":sparkles:",
 )
-st.title("Autonomous RAG")
-st.markdown("##### :orange_heart: built using [phidata](https://github.com/phidatahq/phidata)")
-
+st.title("Auto RAG")
+st.markdown("##### Built by [Aftar Ahmad Sami](https://www.linkedin.com/in/aftar-ahmad-sami/)")
 
 def restart_assistant():
     logger.debug("---*--- Restarting Assistant ---*---")
     st.session_state["auto_rag_assistant"] = None
     st.session_state["auto_rag_assistant_run_id"] = None
+    
     if "url_scrape_key" in st.session_state:
         st.session_state["url_scrape_key"] += 1
+        
     if "file_uploader_key" in st.session_state:
         st.session_state["file_uploader_key"] += 1
+        
     st.rerun()
 
-
 def main() -> None:
+    
+    conn = psycopg2.connect('postgres://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require')
+    
+    query_sql = 'SELECT VERSION()'
+    
+    cur = conn.cursor()
+    cur.execute(query_sql)
+    
+    version = cur.fetchone()[0]
+    print(version)
+
     # Get LLM model
     llm_model = st.sidebar.selectbox("Select LLM", options=["gpt-4-turbo", "gpt-3.5-turbo"])
     # Set assistant_type in session state
@@ -64,7 +77,7 @@ def main() -> None:
         st.session_state["messages"] = assistant_chat_history
     else:
         logger.debug("No chat history found")
-        st.session_state["messages"] = [{"role": "assistant", "content": "Upload a doc and ask me questions..."}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Try uploading a doc and see what can I do..."}]
 
     # Prompt for user input
     if prompt := st.chat_input():
@@ -139,7 +152,7 @@ def main() -> None:
 
     if auto_rag_assistant.storage:
         auto_rag_assistant_run_ids: List[str] = auto_rag_assistant.storage.get_all_run_ids()
-        new_auto_rag_assistant_run_id = st.sidebar.selectbox("Run ID", options=auto_rag_assistant_run_ids)
+        new_auto_rag_assistant_run_id = st.sidebar.selectbox("Thread ID", options=auto_rag_assistant_run_ids)
         if st.session_state["auto_rag_assistant_run_id"] != new_auto_rag_assistant_run_id:
             logger.info(f"---*--- Loading {llm_model} run: {new_auto_rag_assistant_run_id} ---*---")
             st.session_state["auto_rag_assistant"] = get_auto_rag_assistant(

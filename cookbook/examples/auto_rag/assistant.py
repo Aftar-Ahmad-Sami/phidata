@@ -8,7 +8,7 @@ from phi.embedder.openai import OpenAIEmbedder
 from phi.vectordb.pgvector import PgVector2
 from phi.storage.assistant.postgres import PgAssistantStorage
 
-db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
+db_url = "postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require"
 
 
 def get_auto_rag_assistant(
