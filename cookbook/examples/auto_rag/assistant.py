@@ -7,8 +7,10 @@ from phi.tools.duckduckgo import DuckDuckGo
 from phi.embedder.openai import OpenAIEmbedder
 from phi.vectordb.pgvector import PgVector2
 from phi.storage.assistant.postgres import PgAssistantStorage
+import os
 
-db_url = "postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require"
+# # db_url = os.getenv("DB_URL")
+# db_url ="postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require"
 
 
 def get_auto_rag_assistant(
@@ -23,11 +25,11 @@ def get_auto_rag_assistant(
         name="auto_rag_assistant",
         run_id=run_id,
         user_id=user_id,
-        llm=OpenAIChat(model=llm_model),
-        storage=PgAssistantStorage(table_name="auto_rag_assistant_openai", db_url=db_url),
+        llm=OpenAIChat(model=llm_model,api_key="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"),
+        storage=PgAssistantStorage(table_name="auto_rag_assistant_openai", db_url="postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require"),
         knowledge_base=AssistantKnowledge(
             vector_db=PgVector2(
-                db_url=db_url,
+                db_url="postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require",
                 collection="auto_rag_documents_openai",
                 embedder=OpenAIEmbedder(model="text-embedding-3-small", dimensions=1536),
             ),
