@@ -8,18 +8,17 @@ from phi.tools.duckduckgo import DuckDuckGo
 from phi.embedder.openai import OpenAIEmbedder
 from phi.vectordb.pgvector import PgVector2
 from phi.storage.assistant.postgres import PgAssistantStorage
+import streamlit as st
 # from dotenv import load_dotenv
 
 # load_dotenv()
 # db_url = os.getenv("DB_URL")
 # api_key = os.getenv("OPENAI_API_KEY")
 
-# Load and parse the TOML file
-config = toml.load('./secrets.toml')
-
 # Access values from the parsed config dictionary
-db_url = config['database']['url']
-api_key = config['openai']['api_key']
+db_url = st.secrets["url"]
+api_key = st.secrets["api_key"]
+
 
 def get_auto_rag_assistant(
     llm_model: str = "gpt-4-turbo",
