@@ -211,5 +211,5 @@ urllib3==2.2.1
     # via requests
 python-dev
 libpq-dev
-psycopg2
 psycopg2-binary
+psycopg2
