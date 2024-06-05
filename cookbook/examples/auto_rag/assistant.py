@@ -1,4 +1,5 @@
 import os
+import toml
 from typing import Optional
 from phi.assistant import Assistant
 from phi.knowledge import AssistantKnowledge
@@ -7,11 +8,18 @@ from phi.tools.duckduckgo import DuckDuckGo
 from phi.embedder.openai import OpenAIEmbedder
 from phi.vectordb.pgvector import PgVector2
 from phi.storage.assistant.postgres import PgAssistantStorage
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
-db_url = os.getenv("DB_URL")
-api_key = os.getenv("OPENAI_API_KEY")
+# load_dotenv()
+# db_url = os.getenv("DB_URL")
+# api_key = os.getenv("OPENAI_API_KEY")
+
+# Load and parse the TOML file
+config = toml.load('./secrets.toml')
+
+# Access values from the parsed config dictionary
+db_url = config['database']['url']
+api_key = config['openai']['api_key']
 
 def get_auto_rag_assistant(
     llm_model: str = "gpt-4-turbo",
@@ -25,7 +33,7 @@ def get_auto_rag_assistant(
         name="auto_rag_assistant",
         run_id=run_id,
         user_id=user_id,
-        llm=OpenAIChat(model=llm_model,api_key = os.getenv("OPENAI_API_KEY")),
+        llm=OpenAIChat(model=llm_model,api_key = api_key),
         storage=PgAssistantStorage(table_name="auto_rag_assistant_openai", db_url=db_url),
         knowledge_base=AssistantKnowledge(
             vector_db=PgVector2(

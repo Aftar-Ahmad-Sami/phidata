@@ -89,3 +89,4 @@ typing-extensions
 tzdata
 urllib3
 psycopg2-binary
+toml
