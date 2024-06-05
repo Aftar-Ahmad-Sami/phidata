@@ -1,5 +1,5 @@
+import os
 from typing import Optional
-
 from phi.assistant import Assistant
 from phi.knowledge import AssistantKnowledge
 from phi.llm.openai import OpenAIChat
@@ -7,9 +7,11 @@ from phi.tools.duckduckgo import DuckDuckGo
 from phi.embedder.openai import OpenAIEmbedder
 from phi.vectordb.pgvector import PgVector2
 from phi.storage.assistant.postgres import PgAssistantStorage
+from dotenv import load_dotenv
 
-db_url = "postgresql+psycopg2://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require"
-
+load_dotenv()
+db_url = os.getenv("DB_URL")
+api_key = os.getenv("OPENAI_API_KEY")
 
 def get_auto_rag_assistant(
     llm_model: str = "gpt-4-turbo",
@@ -23,7 +25,7 @@ def get_auto_rag_assistant(
         name="auto_rag_assistant",
         run_id=run_id,
         user_id=user_id,
-        llm=OpenAIChat(model=llm_model,api_key='sk-proj-htQIHH70RjGR1GUp3v1iT3BlbkFJAFEh2oigPbEEw6BUAo82'),
+        llm=OpenAIChat(model=llm_model,api_key = os.getenv("OPENAI_API_KEY")),
         storage=PgAssistantStorage(table_name="auto_rag_assistant_openai", db_url=db_url),
         knowledge_base=AssistantKnowledge(
             vector_db=PgVector2(
@@ -41,19 +43,23 @@ def get_auto_rag_assistant(
             "If you need to reference the chat history, use the `get_chat_history` tool.",
             "If the users question is unclear, ask clarifying questions to get more information.",
             "Carefully read the information you have gathered and provide a clear and concise answer to the user.",
-            "Do not use phrases like 'based on my knowledge' or 'depending on the information'.",
+            "Do not use phrases like 'based on my knowledge' or 'depending on what I know'.",
         ],
-        # Show tool calls in the chat
+        # Show tool calls in chat messages.
         show_tool_calls=True,
-        # This setting gives the LLM a tool to search the knowledge base for information
+        
+         # This setting gives LLM tools for searching KB & getting chat history.
         search_knowledge=True,
-        # This setting gives the LLM a tool to get chat history
+
         read_chat_history=True,
+
         tools=[DuckDuckGo()],
-        # This setting tells the LLM to format messages in markdown
+         
         markdown=True,
-        # Adds chat history to messages
+
         add_chat_history_to_messages=True,
+
         add_datetime_to_instructions=True,
+
         debug_mode=debug_mode,
     )

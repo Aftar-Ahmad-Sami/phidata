@@ -1,5 +1,4 @@
 from typing import List
-import psycopg2  # Ensure this is installed via pip if you're using it directly.
 import nest_asyncio
 import streamlit as st
 from phi.assistant import Assistant  # Assuming 'phi' is a custom library/module.
@@ -33,16 +32,6 @@ def restart_assistant():
     st.rerun()
 
 def main() -> None:
-    
-    conn = psycopg2.connect('postgres://avnadmin:AVNS_R6RE-o-OUS9CapOrd1u@pg-338e7d49-sjinnovation.f.aivencloud.com:21557/defaultdb?sslmode=require')
-    
-    query_sql = 'SELECT VERSION()'
-    
-    cur = conn.cursor()
-    cur.execute(query_sql)
-    
-    version = cur.fetchone()[0]
-    print(version)
 
     # Get LLM model
     llm_model = st.sidebar.selectbox("Select LLM", options=["gpt-4-turbo", "gpt-3.5-turbo"])
@@ -167,5 +156,5 @@ def main() -> None:
         st.sidebar.info("Please add documents again as the embeddings model has changed.")
         st.session_state["embeddings_model_updated"] = False
 
-
+st.cache_data.clear()
 main()
