@@ -77,7 +77,7 @@ smmap
 sniffio
 soupsieve
 sqlalchemy
-streamlit
+streamlit==1.35.0
 tenacity
 toml
 tomli
