@@ -23,7 +23,7 @@ def get_auto_rag_assistant(
         name="auto_rag_assistant",
         run_id=run_id,
         user_id=user_id,
-        llm=OpenAIChat(model=llm_model,api_key='Bearer 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',organization='org-ka2P4uZIYDiBjvtkgP5SZ6m2'),
+        llm=OpenAIChat(model=llm_model,api_key='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',organization='org-ka2P4uZIYDiBjvtkgP5SZ6m2'),
         storage=PgAssistantStorage(table_name="auto_rag_assistant_openai", db_url=db_url),
         knowledge_base=AssistantKnowledge(
             vector_db=PgVector2(
