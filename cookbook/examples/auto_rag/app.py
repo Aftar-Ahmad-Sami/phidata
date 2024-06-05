@@ -16,7 +16,7 @@ st.set_page_config(
     page_icon=":sparkles:",
 )
 st.title("Auto RAG")
-st.markdown("##### Built by [Aftar Ahmad Sami](https://www.linkedin.com/in/aftar-ahmad-sami/)")
+# st.markdown("##### Built by [Aftar Ahmad Sami](https://www.linkedin.com/in/aftar-ahmad-sami/)")
 
 def restart_assistant():
     logger.debug("---*--- Restarting Assistant ---*---")
