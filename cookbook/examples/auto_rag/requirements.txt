@@ -209,7 +209,7 @@ tzdata==2024.1
     # via pandas
 urllib3==2.2.1
     # via requests
-python-dev
+python3-dev
 libpq-dev
 psycopg2-binary
 psycopg2
