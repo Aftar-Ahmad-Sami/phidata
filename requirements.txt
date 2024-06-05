@@ -88,7 +88,6 @@ typer
 typing-extensions
 tzdata
 urllib3
-python3-dev
 libpq-dev
 psycopg2-binary
 psycopg2
