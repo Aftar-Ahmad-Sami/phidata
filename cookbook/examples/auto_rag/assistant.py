@@ -16,8 +16,8 @@ import streamlit as st
 # api_key = os.getenv("OPENAI_API_KEY")
 
 # Access values from the parsed config dictionary
-db_url = st.secrets["url"]
-api_key = st.secrets["api_key"]
+db_url = st.secrets['database']['url']
+api_key = st.secrets['openai']['api_key']
 
 
 def get_auto_rag_assistant(
